@@ -1,6 +1,7 @@
 import cx from 'clsx';
 
 import Button from '~app/styles/Button';
+import Card from '~app/components/Card';
 import Styled from './styled';
 import Toolbar from '~app/styles/Toolbar';
 import { useCardsState } from '~app/hooks/useCardsState';
@@ -35,21 +36,22 @@ export default function Deck({
 
   return (
     <Styled.Container className={cx('deck', classes?.root, className)}>
-      <Styled.Deck
+      <Styled.CardDeck
         ref={scopeRef}
         className={classes?.deck}
+        $cardClassName="card"
         $width={size.width}
         $height={size.height}
       >
         {cards.map((meta, i) => (
-          <Styled.Card
+          <Card
             {...{ backImg, meta, size }}
             key={meta.id}
             animationProps={{ animate: { z: -i } }}
             classes={cardClasses}
           />
         ))}
-      </Styled.Deck>
+      </Styled.CardDeck>
 
       <Toolbar.Nav className={classes?.nav}>
         {shuffling ? (

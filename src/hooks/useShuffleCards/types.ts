@@ -1,11 +1,11 @@
-import type { useAnimate } from 'motion/react';
-
 import type { useCardsState } from '../useCardsState';
 import type { CardMeta, CardSize } from '../useCardsState';
 
-type CardsState = ReturnType<typeof useCardsState>;
+type CardsState = Pick<
+  ReturnType<typeof useCardsState>,
+  'cards' | 'animate' | 'getCardElements' | 'onCardsChange'
+>;
 
-export type Animate = ReturnType<typeof useAnimate>;
 export type ShuffleMode = 'overhand' | 'riffle';
 
 export type ShuffleUtils = {
@@ -23,8 +23,7 @@ export type ShuffleUtils = {
   };
 };
 
-export interface ShuffleCardsOptions
-  extends Pick<CardsState, 'cards' | 'animate' | 'getCardElements' | 'onCardsChange'> {
+export interface ShuffleCardsOptions extends CardsState {
   size: CardSize<'component'>;
   duration: number;
 }

@@ -1,7 +1,5 @@
 import styled from 'styled-components';
-
-import Card from '~app/components/Card';
-import type { CardSize } from '~app/hooks/useCardsState';
+import type { CardDeckProps } from './types';
 
 export default {
   Container: styled.section`
@@ -14,7 +12,7 @@ export default {
     gap: 24px;
     overflow: hidden;
   `,
-  Deck: styled.div<CardSize<'styled'>>`
+  CardDeck: styled.div<CardDeckProps>`
     position: relative;
     display: flex;
     flex-direction: column;
@@ -24,10 +22,13 @@ export default {
     min-height: ${({ $height }) => `${$height * 2}px`};
     transform-style: preserve-3d;
     transform: rotate3d(1, 0.2, -0.5, 45deg);
-  `,
-  Card: styled(Card)`
-    position: absolute;
-    left: ${({ size }) => `calc(50% - ${size.width / 2.5}px)`};
+
+    ${({ $cardClassName, $width }) => `
+      & > .${$cardClassName} {
+        position: absolute;
+        left: calc(50% - ${$width / 2}px);
+      }
+    `}
   `,
   Status: styled.span`
     padding: 8px 16px;
