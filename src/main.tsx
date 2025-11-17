@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 
 import Deck from '~app/containers/Deck';
 import CardBackImg from '~app/assets/imgs/poker-pattern.png';
+import GlobalStyle from '~app/styles/GlobalStyle';
 
 /**
  * TODO: 關於洗牌動畫
@@ -27,6 +28,8 @@ import CardBackImg from '~app/assets/imgs/poker-pattern.png';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
+    <GlobalStyle.App />
+
     <Deck
       cardOptions={{
         backImg: CardBackImg,

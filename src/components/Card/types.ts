@@ -1,8 +1,7 @@
 import type { MouseEvent } from 'react';
 import type { MotionNodeAnimationOptions } from 'motion/react';
 
-import type { CardMeta } from '~app/hooks/useCardsState';
-import type { CardSize } from '~app/hooks/useShuffleCards';
+import type { CardMeta, CardSize } from '~app/hooks/useCardsState';
 
 export type CardAnimationProps = Pick<
   MotionNodeAnimationOptions,

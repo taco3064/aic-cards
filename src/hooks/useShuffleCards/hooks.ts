@@ -1,19 +1,50 @@
 import { useAnimate } from 'motion/react';
 
-import { getShuffleHandlers } from './utils';
-import type { HandleCardsChange } from '../useCardsState';
-import type { ShuffleCardsOptions, ShuffleMode } from './types';
+import useOverhand from './useOverhand';
+import useRiffle from './useRiffle';
 
-export function useShuffleCards<ScopeEl extends HTMLElement>(
-  options: ShuffleCardsOptions,
-  onCardsChange: HandleCardsChange,
-) {
-  const [scopeRef, animate] = useAnimate<ScopeEl>();
+import type {
+  ShuffleCardsOptions,
+  ShuffleHandlerHook,
+  ShuffleMode,
+  ShuffleUtils,
+} from './types';
+
+export function useShuffleCards<ScopeEl extends HTMLElement>({
+  onCardsChange,
+  ...options
+}: ShuffleCardsOptions) {
+  const animate = useAnimate<ScopeEl>();
+
+  const utils: ShuffleUtils = {
+    getRelease(cards) {
+      const base = Math.ceil(cards.length / 5);
+
+      return Math.ceil(Math.random() * base);
+    },
+    getSplited(cards, elements, start, deleteCount = cards.length) {
+      if (cards.length !== elements.length) {
+        throw new Error('Cards and elements length mismatch');
+      }
+
+      return {
+        total: deleteCount - start,
+        cards: cards.splice(start, deleteCount),
+        elements: elements.splice(start, deleteCount),
+      };
+    },
+  };
+
+  const handlers: Record<ShuffleMode, ReturnType<ShuffleHandlerHook>> = {
+    overhand: useOverhand(options, utils),
+    riffle: useRiffle(options, utils),
+  };
 
   return {
-    scopeRef,
+    scopeRef: animate[0],
+
     onShuffle: async (mode: ShuffleMode) => {
-      const { [mode]: shuffle } = getShuffleHandlers(options, scopeRef.current, animate);
+      const shuffle = handlers[mode];
 
       onCardsChange(true);
       onCardsChange(await shuffle());

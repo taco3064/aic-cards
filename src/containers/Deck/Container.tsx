@@ -1,50 +1,71 @@
 import cx from 'clsx';
 
-import Card from '~app/components/Card';
-import { CardDeck, Button, Status, Toolbar } from './styled';
+import Styled from './styled';
 import { useCardsState } from '~app/hooks/useCardsState';
 import { useShuffleCards } from '~app/hooks/useShuffleCards';
 import type { DeckProps } from './types';
 
 export default function Deck({
-  cardOptions: { backImg, size, ...cardOptions },
+  cardOptions: { backImg, size, total, generateMeta },
   className,
+  classes,
   duration = 0.2,
 }: DeckProps) {
-  const { cards, shuffling, onCardsChange } = useCardsState(cardOptions);
+  const { cards, scopeRef, shuffling, ...shuffleFns } = useCardsState<
+    HTMLDivElement,
+    HTMLDivElement
+  >({
+    selector: ':scope > .card',
+    total,
+    generateMeta,
+  });
 
-  const { scopeRef, onShuffle } = useShuffleCards<HTMLDivElement>(
-    {
-      cards,
-      duration,
-      selector: ':scope > .card',
-      size,
-    },
-    onCardsChange,
-  );
+  const { onShuffle } = useShuffleCards<HTMLDivElement>({
+    ...shuffleFns,
+    cards,
+    duration,
+    size,
+  });
 
   return (
-    <section className={cx('deck', className)}>
-      <CardDeck ref={scopeRef} $width={size.width} $height={size.height}>
+    <Styled.Container className={cx('deck', classes?.root, className)}>
+      <Styled.Deck
+        ref={scopeRef}
+        className={classes?.deck}
+        $width={size.width}
+        $height={size.height}
+      >
         {cards.map((meta, i) => (
-          <Card
+          <Styled.Card
             {...{ backImg, meta, size }}
             key={meta.id}
             animationProps={{ animate: { z: -i } }}
+            className={classes?.card}
           />
         ))}
-      </CardDeck>
+      </Styled.Deck>
 
-      <Toolbar>
+      <Styled.Toolbar className={classes?.toolbar}>
         {shuffling ? (
-          <Status>Shuffling...</Status>
+          <Styled.Status className={classes?.status}>Shuffling...</Styled.Status>
         ) : (
           <>
-            <Button onClick={() => onShuffle('overhand')}>Overhand</Button>
-            <Button onClick={() => onShuffle('riffle')}>Riffle</Button>
+            <Styled.Button
+              className={classes?.button}
+              onClick={() => onShuffle('overhand')}
+            >
+              Overhand
+            </Styled.Button>
+
+            <Styled.Button
+              className={classes?.button}
+              onClick={() => onShuffle('riffle')}
+            >
+              Riffle
+            </Styled.Button>
           </>
         )}
-      </Toolbar>
-    </section>
+      </Styled.Toolbar>
+    </Styled.Container>
   );
 }

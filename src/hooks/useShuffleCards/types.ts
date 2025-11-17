@@ -1,33 +1,35 @@
 import type { useAnimate } from 'motion/react';
-import type { CardMeta } from '../useCardsState';
 
-type SizeFields = 'width' | 'height';
+import type { useCardsState } from '../useCardsState';
+import type { CardMeta, CardSize } from '../useCardsState';
 
+type CardsState = ReturnType<typeof useCardsState>;
+
+export type Animate = ReturnType<typeof useAnimate>;
 export type ShuffleMode = 'overhand' | 'riffle';
 
-export type CardSize<T extends 'component' | 'styled'> = Record<
-  T extends 'component' ? SizeFields : `$${SizeFields}`,
-  number
->;
+export type ShuffleUtils = {
+  getRelease: (cards: CardMeta[]) => number;
 
-export interface ShuffleCardsOptions {
-  cards: CardMeta[];
+  getSplited: (
+    cards: CardMeta[],
+    elements: Element[],
+    start: number,
+    deleteCount?: number,
+  ) => {
+    total: number;
+    cards: CardMeta[];
+    elements: Element[];
+  };
+};
+
+export interface ShuffleCardsOptions
+  extends Pick<CardsState, 'cards' | 'animate' | 'getCardElements' | 'onCardsChange'> {
   size: CardSize<'component'>;
-  selector: string;
   duration: number;
 }
 
-export type GetShuffleHandlers = (
-  { cards, duration, selector, size }: ShuffleCardsOptions,
-  scopeEl: HTMLElement,
-  animate: ReturnType<typeof useAnimate>[1],
-) => Record<ShuffleMode, () => Promise<CardMeta[]>>;
-
-export type ShuffleFns = Record<
-  ShuffleMode,
-  (
-    { cards, duration, selector, size }: ShuffleCardsOptions,
-    scopeEl: HTMLElement,
-    animate: ReturnType<typeof useAnimate>[1],
-  ) => Promise<CardMeta[]>
->;
+export type ShuffleHandlerHook = (
+  options: Omit<ShuffleCardsOptions, 'onCardsChange'>,
+  utils: ShuffleUtils,
+) => () => Promise<CardMeta[]>;

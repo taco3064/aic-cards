@@ -1,2 +1,9 @@
 export { useCardsState } from './hooks';
-export type { CardMeta, CardOptions, HandleCardsChange } from './types';
+
+export type {
+  AnimateFn,
+  CardMeta,
+  CardOptions,
+  CardSize,
+  HandleCardsChange,
+} from './types';

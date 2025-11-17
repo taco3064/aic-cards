@@ -1,7 +1,13 @@
+import { useAnimate } from 'motion/react';
 import { useState } from 'react';
-import type { CardMeta, CardOptions } from './types';
+import type { CardMeta, CardStateOptions } from './types';
 
-export function useCardsState({ total, generateMeta }: CardOptions) {
+export function useCardsState<ScopeEl extends Element, CardEl extends Element>({
+  selector,
+  total,
+  generateMeta,
+}: CardStateOptions) {
+  const [scopeRef, animate] = useAnimate<ScopeEl>();
   const [shuffling, setShuffling] = useState(false);
 
   const [cards, setCards] = useState<CardMeta[]>(
@@ -10,8 +16,10 @@ export function useCardsState({ total, generateMeta }: CardOptions) {
 
   return {
     cards,
+    scopeRef,
     shuffling,
 
+    animate,
     onCardsChange: (state: CardMeta[] | true) => {
       if (state === true) {
         return setShuffling(true);
@@ -19,6 +27,13 @@ export function useCardsState({ total, generateMeta }: CardOptions) {
 
       setCards(state);
       setShuffling(false);
+    },
+    getCardElements: () => {
+      if (!scopeRef.current) {
+        throw new Error('Scope element is not defined');
+      }
+
+      return Array.from(scopeRef.current.querySelectorAll<CardEl>(selector));
     },
   };
 }
