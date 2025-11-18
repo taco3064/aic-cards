@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 import useOverhand from './useOverhand';
 import useRiffle from './useRiffle';
@@ -16,6 +16,8 @@ export function useShuffleCards<Meta extends CardMeta>({
   onCardsChange,
   ...options
 }: ShuffleCardsOptions<Meta>) {
+  const [shuffling, setShuffling] = useState(false);
+
   const handlers: Record<ShuffleMode, ShuffleHandler<Meta>> = {
     overhand: useOverhand(options),
     riffle: useRiffle(options),
@@ -23,12 +25,12 @@ export function useShuffleCards<Meta extends CardMeta>({
 
   const utils: ShuffleUtils<Meta> = useMemo(
     () => ({
-      getRelease(cards) {
+      release(cards) {
         const base = Math.ceil(cards.length / 5);
 
         return Math.ceil(Math.random() * base);
       },
-      getSplited(cards, elements, start, deleteCount = cards.length) {
+      cut(cards, elements, start, deleteCount = cards.length) {
         if (cards.length !== elements.length) {
           throw new Error('Cards and elements length mismatch');
         }
@@ -43,10 +45,15 @@ export function useShuffleCards<Meta extends CardMeta>({
     [],
   );
 
-  return async (mode: ShuffleMode) => {
-    const shuffle = handlers[mode];
+  return {
+    shuffling,
 
-    onCardsChange(true);
-    onCardsChange(await shuffle(getCardElements(), utils));
+    async onShuffle(mode: ShuffleMode) {
+      const shuffle = handlers[mode];
+
+      setShuffling(true);
+      onCardsChange(await shuffle(getCardElements(), utils));
+      setShuffling(false);
+    },
   };
 }

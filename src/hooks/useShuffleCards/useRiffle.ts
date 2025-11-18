@@ -17,8 +17,8 @@ export default function useRiffle<Meta extends CardMeta>({
     [animate, duration],
   );
 
-  return async (elements, { getRelease, getSplited }) => {
-    const left = getSplited(cards, elements, 0, Math.ceil(cards.length / 2));
+  return async (elements, { release, cut }) => {
+    const left = cut(cards, elements, 0, Math.ceil(cards.length / 2));
     const result: Meta[] = [];
 
     await Promise.allSettled([
@@ -32,16 +32,12 @@ export default function useRiffle<Meta extends CardMeta>({
 
     while (left.elements.length || elements.length) {
       const fall = {
-        left: getSplited(
+        left: cut(
           left.cards,
           left.elements,
-          Math.max(0, left.elements.length - getRelease(cards) - 1),
+          Math.max(0, left.elements.length - release(cards) - 1),
         ),
-        right: getSplited(
-          cards,
-          elements,
-          Math.max(0, elements.length - getRelease(cards) - 1),
-        ),
+        right: cut(cards, elements, Math.max(0, elements.length - release(cards) - 1)),
       };
 
       await Promise.allSettled(

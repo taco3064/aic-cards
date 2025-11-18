@@ -1,4 +1,6 @@
 import styled from 'styled-components';
+
+import Button from '~app/styles/Button';
 import type { CardDeckProps } from './types';
 
 export default {
@@ -30,6 +32,20 @@ export default {
         left: calc(50% - ${$width / 2}px);
       }
     `}
+  `,
+  ShuffleButton: styled(Button.Base)`
+    font-size: 14px;
+    width: 120px;
+  `,
+  ActionButton: styled(Button.Base)`
+    background: #609fc0;
+    color: #fff;
+    width: 60px;
+    height: 60px;
+    font-size: 36px;
+    border-radius: 50% !important;
+    margin: -10px;
+    z-index: 1;
   `,
   Status: styled.span`
     padding: 8px 16px;

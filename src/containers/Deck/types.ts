@@ -11,6 +11,6 @@ export interface CardDeckProps extends CardSize<'styled'> {
 export interface DeckProps<Meta extends CardMeta> {
   cardOptions: Pick<CardProps, 'backImg' | 'size'> & CardOptions<Meta>;
   className?: string;
-  classes?: Classes<'root' | 'deck' | 'status' | 'toolbar' | 'button'> & CardClasses;
+  classes?: Classes<'root' | 'deck' | 'status' | 'toolbar'> & CardClasses;
   duration?: number;
 }

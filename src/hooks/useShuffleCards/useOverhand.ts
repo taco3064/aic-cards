@@ -17,11 +17,11 @@ export default function useOverhand<Meta extends CardMeta>({
     [animate, duration],
   );
 
-  return async (elements, { getRelease, getSplited }) => {
+  return async (elements, { release, cut }) => {
     const result: Meta[] = [];
 
     while (cards.length) {
-      const pinched = getSplited(cards, elements, 0, getRelease(cards));
+      const pinched = cut(cards, elements, 0, release(cards));
 
       await Promise.allSettled([
         ...pinched.elements.map((el, i) => {

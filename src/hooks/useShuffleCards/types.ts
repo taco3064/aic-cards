@@ -28,9 +28,9 @@ export interface ShuffleCardsOptions<Meta extends CardMeta> extends CardsState<M
 }
 
 export interface ShuffleUtils<Meta extends CardMeta> {
-  getRelease: (cards: Meta[]) => number;
+  release: (cards: Meta[]) => number;
 
-  getSplited: (
+  cut: (
     cards: Meta[],
     elements: Element[],
     start: number,

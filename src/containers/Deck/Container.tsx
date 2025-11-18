@@ -1,9 +1,12 @@
 import cx from 'clsx';
+import { useState } from 'react';
 
 import Button from '~app/styles/Button';
 import Card from '~app/components/Card';
+import DrawCardIcon from '~app/components/icons/DrawCardIcon';
+import ResetIcon from '~app/components/icons/ResetIcon';
 import Styled from './styled';
-import Toolbar from '~app/styles/Toolbar';
+import Toolbar from '~app/styles/Toolbar/Styled';
 import { useCardsState, type CardMeta } from '~app/hooks/useCardsState';
 import { useExtractClasses } from '~app/hooks/useExtractClasses';
 import { useShuffleCards } from '~app/hooks/useShuffleCards';
@@ -13,28 +16,40 @@ import type { DeckProps } from './types';
 
 const CARD_CLASS_NAME = 'card';
 
+const { Container, CardDeck, ShuffleButton, ActionButton, Status } = Styled;
+
 export default function Deck<Meta extends CardMeta>({
   cardOptions: { backImg, size, total, generateMeta },
   className,
   classes,
   duration = 0.2,
 }: DeckProps<Meta>) {
-  const { cards, scopeRef, animating, ...stateFns } = useCardsState<Meta, HTMLDivElement>(
-    {
-      selector: `:scope > .${CARD_CLASS_NAME}`,
-      total,
-      generateMeta,
-    },
-  );
+  const { deckRef, cards, onReset, ...stateFns } = useCardsState<Meta, HTMLDivElement>({
+    selector: `:scope > .${CARD_CLASS_NAME}`,
+    total,
+    generateMeta,
+  });
 
-  const onShuffle = useShuffleCards({ ...stateFns, cards, duration, size });
-  const onSpread = useSpreadCards({ ...stateFns, cards, duration });
+  const { shuffling, onShuffle } = useShuffleCards({
+    ...stateFns,
+    cards,
+    duration,
+    size,
+  });
+
+  const { spreading, onSpread } = useSpreadCards({
+    ...stateFns,
+    cards,
+    duration,
+  });
+
+  const [spreaded, setSpreaded] = useState(false);
   const cardClasses = useExtractClasses<CardProps>(CARD_CLASS_NAME, classes);
 
   return (
-    <Styled.Container className={cx('deck', classes?.root, className)}>
-      <Styled.CardDeck
-        ref={scopeRef}
+    <Container className={cx('deck', classes?.root, className)}>
+      <CardDeck
+        ref={deckRef}
         className={classes?.deck}
         $cardClassName={CARD_CLASS_NAME}
         $width={size.width}
@@ -48,30 +63,45 @@ export default function Deck<Meta extends CardMeta>({
             classes={cardClasses}
           />
         ))}
-      </Styled.CardDeck>
+      </CardDeck>
 
       <Toolbar.Base className={classes?.toolbar}>
-        {animating ? (
-          <Styled.Status className={classes?.status}>Shuffling...</Styled.Status>
+        {shuffling ? (
+          <Status className={classes?.status}>Shuffling...</Status>
+        ) : spreading ? (
+          <Status className={classes?.status}>Spreading...</Status>
         ) : (
-          <>
-            <Button.Base
-              className={classes?.button}
-              onClick={() => onShuffle('overhand')}
-            >
-              Overhand
-            </Button.Base>
+          <Button.Group>
+            {spreaded ? (
+              <ActionButton
+                onClick={() => {
+                  onReset();
+                  setSpreaded(false);
+                }}
+              >
+                <ResetIcon />
+              </ActionButton>
+            ) : (
+              <>
+                <ShuffleButton onClick={() => onShuffle('overhand')}>
+                  Overhand
+                </ShuffleButton>
 
-            <Button.Base className={classes?.button} onClick={() => onShuffle('riffle')}>
-              Riffle
-            </Button.Base>
+                <ActionButton
+                  onClick={() => {
+                    onSpread();
+                    setSpreaded(true);
+                  }}
+                >
+                  <DrawCardIcon />
+                </ActionButton>
 
-            <Button.Base className={classes?.button} onClick={onSpread}>
-              Spread
-            </Button.Base>
-          </>
+                <ShuffleButton onClick={() => onShuffle('riffle')}>Riffle</ShuffleButton>
+              </>
+            )}
+          </Button.Group>
         )}
       </Toolbar.Base>
-    </Styled.Container>
+    </Container>
   );
 }
