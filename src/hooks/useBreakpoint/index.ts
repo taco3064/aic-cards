@@ -1,2 +1,2 @@
-export { useBreakpoint } from './hooks';
+export { useBreakpoint, useBreakpointMatches } from './hooks';
 export type { Breakpoint } from './types';

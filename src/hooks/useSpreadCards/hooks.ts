@@ -1,24 +1,28 @@
 import { useState } from 'react';
 
-import { useBreakpoint } from '../useBreakpoint';
+import useArchedRibbon from './useArchedRibbon';
 import type { CardMeta } from '../useCardsState';
-import type { SpreadCardsOptions } from './types';
+import type { SpreadCardsOptions, SpreadHandlers } from './types';
 
 export function useSpreadCards<Meta extends CardMeta>({
-  cards,
-  animate,
+  getCardElements,
+  ...options
 }: SpreadCardsOptions<Meta>) {
   const [spreading, setSpreading] = useState(false);
-  const breakpoint = useBreakpoint();
+
+  const spreads: SpreadHandlers = {
+    ARCHED_RIBBON: useArchedRibbon(options),
+  };
 
   return {
     spreading,
 
-    async onSpread() {
-      setSpreading(true);
-      console.log(breakpoint, cards, animate);
+    async onSpread(mode: keyof SpreadHandlers) {
+      const elements = getCardElements();
+      const spread = spreads[mode];
 
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      setSpreading(true);
+      await spread(elements);
       setSpreading(false);
     },
   };

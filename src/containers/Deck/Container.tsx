@@ -8,7 +8,7 @@ import ResetIcon from '~app/components/icons/ResetIcon';
 import Styled from './styled';
 import Toolbar from '~app/styles/Toolbar/Styled';
 import { useCardsState, type CardMeta } from '~app/hooks/useCardsState';
-import { useExtractClasses } from '~app/hooks/useExtractClasses';
+import { useExtractClasses } from '~app/hooks/useClasses';
 import { useShuffleCards } from '~app/hooks/useShuffleCards';
 import { useSpreadCards } from '~app/hooks/useSpreadCards';
 import type { CardProps } from '~app/components/Card';
@@ -41,6 +41,7 @@ export default function Deck<Meta extends CardMeta>({
     ...stateFns,
     cards,
     duration,
+    size,
   });
 
   const [spreaded, setSpreaded] = useState(false);
@@ -83,20 +84,20 @@ export default function Deck<Meta extends CardMeta>({
               </ActionButton>
             ) : (
               <>
-                <ShuffleButton onClick={() => onShuffle('overhand')}>
+                <ShuffleButton onClick={() => onShuffle('OVERHAND')}>
                   Overhand
                 </ShuffleButton>
 
                 <ActionButton
                   onClick={() => {
-                    onSpread();
+                    onSpread('ARCHED_RIBBON');
                     setSpreaded(true);
                   }}
                 >
                   <DrawCardIcon />
                 </ActionButton>
 
-                <ShuffleButton onClick={() => onShuffle('riffle')}>Riffle</ShuffleButton>
+                <ShuffleButton onClick={() => onShuffle('RIFFLE')}>Riffle</ShuffleButton>
               </>
             )}
           </Button.Group>

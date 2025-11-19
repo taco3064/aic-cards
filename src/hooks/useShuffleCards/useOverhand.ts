@@ -1,27 +1,16 @@
-import { useCallback } from 'react';
+import { usePresetAnimate } from '../usePresetAnimate';
+import type { UseShuffleHandler } from './types';
 
-import type { CardMeta } from '../useCardsState';
-import type { HandlerOptions, OverrideAnimate, ShuffleHandler } from './types';
-
-export default function useOverhand<Meta extends CardMeta>({
-  cards,
-  duration,
-  size,
-  animate,
-}: HandlerOptions<Meta>): ShuffleHandler<Meta> {
-  const total = cards.length;
+const useOverhand: UseShuffleHandler = ({ duration, size, animate }) => {
+  const presetAnim = usePresetAnimate(animate, { duration });
   const displY = size.height * 1.2;
 
-  const anim = useCallback<OverrideAnimate>(
-    (...args) => animate(...args, { duration }),
-    [animate, duration],
-  );
-
-  return async (elements, { release, cut }) => {
-    const result: Meta[] = [];
+  return async (cards, elements, { release, cut }) => {
+    const total = cards.length;
+    const result: typeof cards = [];
 
     while (cards.length) {
-      const pinched = cut(cards, elements, 0, release(cards));
+      const pinched = cut(cards, elements, 0, release(cards) + 3);
 
       await Promise.allSettled([
         ...pinched.elements.map((el, i) => {
@@ -30,7 +19,7 @@ export default function useOverhand<Meta extends CardMeta>({
             to: total - (i + elements.length),
           };
 
-          return anim(el, { y: 0, z: [z.fm, z.to] });
+          return presetAnim(el, { y: 0, z: [z.fm, z.to] });
         }),
 
         ...elements.map((el, i) => {
@@ -39,15 +28,18 @@ export default function useOverhand<Meta extends CardMeta>({
             to: total - i,
           };
 
-          return anim(el, { y: [0, displY, displY, 0], z: [z.fm, z.fm, z.to, z.to] });
+          return presetAnim(el, {
+            y: [0, displY, displY, 0],
+            z: [z.fm, z.fm, z.to, z.to],
+          });
         }),
       ]);
 
       result.unshift(...pinched.cards);
     }
 
-    result.unshift(...cards);
-
     return result;
   };
-}
+};
+
+export default useOverhand;

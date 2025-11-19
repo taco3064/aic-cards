@@ -1,9 +1,6 @@
 import type { JsonObject } from 'type-fest';
-import type { useAnimate } from 'motion/react';
 
 type SizeFields = 'width' | 'height';
-
-export type Animate = ReturnType<typeof useAnimate>[1];
 
 export interface CardMeta extends JsonObject {
   id: string | number;

@@ -3,28 +3,28 @@ const ALIAS = '~app';
 const FOLDER = {
   components: {
     disableFolderImports: ['containers', 'contexts'],
-    disableReacttImports: ['createContext', 'useContext'],
+    disableReactImports: ['createContext', 'useContext'],
   },
   containers: {
     disableFolderImports: [],
-    disableReacttImports: ['createContext', 'useContext'],
+    disableReactImports: ['createContext', 'useContext'],
   },
   contexts: {
     disableFolderImports: ['components', 'containers', 'hooks'],
   },
   hooks: {
     disableFolderImports: ['components', 'containers', 'styles'],
-    disableReacttImports: ['createContext'],
+    disableReactImports: ['createContext'],
   },
   styles: {
     disableFolderImports: ['components', 'containers', 'contexts', 'hooks'],
-    disableReacttImports: ['createContext', 'useContext'],
+    disableReactImports: ['createContext', 'useContext'],
   },
 };
 
 export default function getStructureLint() {
   return Object.entries(FOLDER).map(
-    ([folder, { disableReacttImports, disableFolderImports }]) => ({
+    ([folder, { disableReactImports, disableFolderImports }]) => ({
       files: [`src/${folder}/**/*.ts`, `src/${folder}/**/*.tsx`],
       rules: {
         '@typescript-eslint/no-restricted-imports': [
@@ -39,11 +39,11 @@ export default function getStructureLint() {
                 ],
               },
             ],
-            ...(disableReacttImports && {
+            ...(disableReactImports && {
               paths: [
                 {
                   name: 'react',
-                  importNames: disableReacttImports,
+                  importNames: disableReactImports,
                 },
               ],
             }),
@@ -53,5 +53,3 @@ export default function getStructureLint() {
     }),
   );
 }
-
-console.log(JSON.stringify(getStructureLint(), null, 2));

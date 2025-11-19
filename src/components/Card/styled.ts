@@ -25,5 +25,7 @@ export default {
     border-radius: inherit;
     background-image: url(${({ $backImg }) => $backImg});
     background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
   `,
 };
