@@ -20,7 +20,7 @@ export function useCardsState<
     getCardElements,
     onCardsChange: setCards,
     onCardsReset: async () => {
-      await animate(getCardElements(), { x: 0, y: 0 });
+      await animate(getCardElements(), { x: 0, y: 0, rotate: 0 });
       setCards(init);
     },
   };

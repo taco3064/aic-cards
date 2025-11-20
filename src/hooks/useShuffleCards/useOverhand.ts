@@ -1,8 +1,8 @@
 import { usePresetAnimate } from '../usePresetAnimate';
 import type { CuttedDeck, UseShuffleHandler } from './types';
 
-const useOverhand: UseShuffleHandler = ({ cards, duration, size, animate }) => {
-  const presetAnim = usePresetAnimate(animate, { duration });
+const useOverhand: UseShuffleHandler = ({ cards, size, animate }) => {
+  const presetAnim = usePresetAnimate(animate, { duration: 0.2 });
   const total = cards.length;
   const displY = size.height * 1.2;
 

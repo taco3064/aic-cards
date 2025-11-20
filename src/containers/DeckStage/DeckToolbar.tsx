@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import cx from 'clsx';
 
 import Button from '~app/styles/Button';
 import DrawCardIcon from '~app/components/icons/DrawCardIcon';
@@ -14,15 +14,15 @@ import type { DeckToolbarProps } from './types';
 const { ShuffleButton, ActionButton } = Styled;
 
 export default function DeckToolbar<Meta extends CardMeta>({
+  className,
   onCardsReset,
   ...props
 }: DeckToolbarProps<Meta>) {
-  const [spreaded, setSpreaded] = useState(false);
   const { shuffling, onShuffle } = useShuffleCards(props);
-  const { spreading, onSpread } = useSpreadCards(props);
+  const { spreaded, spreading, onSpread, onSpreadReset } = useSpreadCards(props);
 
   return (
-    <Toolbar.Base>
+    <Toolbar.Base className={cx('DeckToolbar', className, { spreaded })}>
       {shuffling || spreading ? (
         <Typography.Status>
           {shuffling ? 'Shuffling...' : 'Spreading...'}
@@ -33,7 +33,7 @@ export default function DeckToolbar<Meta extends CardMeta>({
             <ActionButton
               onClick={() => {
                 onCardsReset();
-                setSpreaded(false);
+                onSpreadReset();
               }}
             >
               <ResetIcon />
@@ -44,12 +44,7 @@ export default function DeckToolbar<Meta extends CardMeta>({
                 Overhand
               </ShuffleButton>
 
-              <ActionButton
-                onClick={() => {
-                  onSpread('ARCHED_RIBBON');
-                  setSpreaded(true);
-                }}
-              >
+              <ActionButton onClick={() => onSpread('ARCHED_RIBBON')}>
                 <DrawCardIcon />
               </ActionButton>
 

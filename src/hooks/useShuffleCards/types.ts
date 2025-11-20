@@ -18,7 +18,6 @@ export interface ShuffleCardsOptions<Meta extends CardMeta>
     CardsState<Meta>,
     'cards' | 'animate' | 'getCardElements' | 'onCardsChange'
   > {
-  duration: number;
   size: CardSize<'component'>;
 }
 

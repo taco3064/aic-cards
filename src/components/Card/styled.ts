@@ -17,6 +17,7 @@ const BaseCard = styled.div<{ $img?: string }>`
 export default {
   Container: styled(motion.div)<CardSize<'styled'>>`
     transform-style: preserve-3d;
+    transform-origin: center;
     border-radius: ${({ $width }) => `${$width * 0.07}px`};
     width: ${({ $width }) => `${$width}px`};
     height: ${({ $height }) => `${$height}px`};

@@ -10,7 +10,6 @@ export default function DeckStage<Meta extends CardMeta>({
   backImg,
   className,
   defaultCards,
-  duration = 0.2,
   size,
   onCardClick,
   onCardContentRender,
@@ -42,7 +41,7 @@ export default function DeckStage<Meta extends CardMeta>({
         ))}
       </Styled.Deck>
 
-      <DeckToolbar {...methodProps} {...{ cards, duration, size }} />
+      <DeckToolbar {...methodProps} {...{ cards, size }} />
     </Styled.Container>
   );
 }

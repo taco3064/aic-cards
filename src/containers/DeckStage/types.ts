@@ -1,27 +1,25 @@
 import type { ReactNode } from 'react';
-import type { SetRequired } from 'type-fest';
 
 import type { CardMeta, CardSize, CardsState } from '~app/hooks/useCardsState';
 import type { CardProps } from '~app/components/Card';
+
+type BaseCardState<Meta extends CardMeta> = Pick<
+  CardsState<Meta>,
+  'animate' | 'cards' | 'getCardElements' | 'onCardsChange' | 'onCardsReset'
+>;
 
 export interface CardDeckProps extends CardSize<'styled'> {
   $cardClassName: string;
 }
 
 export interface DeckToolbarProps<Meta extends CardMeta>
-  extends Pick<CardProps<Meta>, 'size'>,
-    Pick<
-      CardsState<Meta>,
-      'animate' | 'cards' | 'getCardElements' | 'onCardsChange' | 'onCardsReset'
-    > {
-  duration: number;
+  extends BaseCardState<Meta>,
+    Pick<CardProps<Meta>, 'size'> {
+  className?: string;
 }
 
 export interface DeckStageProps<Meta extends CardMeta>
-  extends SetRequired<
-    Partial<Pick<DeckToolbarProps<Meta>, 'duration' | 'size'>>,
-    'size'
-  > {
+  extends Pick<CardProps<Meta>, 'size'> {
   backImg?: string;
   className?: string;
   defaultCards: Meta[];

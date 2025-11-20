@@ -24,6 +24,10 @@ export default {
     transform: rotate3d(1, 0.2, -0.5, 45deg);
     transform-origin: center;
 
+    &:has(+ .spreaded) {
+      transform: rotate3d(0, 0, 0, 0deg);
+    }
+
     ${({ $width, $height }) => `
       & > * {
         position: absolute;

@@ -1,8 +1,8 @@
 import { usePresetAnimate } from '../usePresetAnimate';
 import type { UseShuffleHandler } from './types';
 
-const useRiffle: UseShuffleHandler = ({ cards, duration, size, animate }) => {
-  const presetAnim = usePresetAnimate(animate, { duration: duration / 2 });
+const useRiffle: UseShuffleHandler = ({ cards, size, animate }) => {
+  const presetAnim = usePresetAnimate(animate, { duration: 0.1 });
   const total = cards.length;
   const displX = size.width * 0.6;
 
