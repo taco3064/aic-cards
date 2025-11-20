@@ -5,7 +5,7 @@ import type { CardMeta, CardSize } from '~app/hooks/useCardsState';
 
 export type CardAnimationProps = Pick<
   MotionNodeAnimationOptions,
-  'animate' | 'transition'
+  'animate' | 'initial' | 'transition'
 >;
 
 export interface CardProps<Meta extends CardMeta = CardMeta> {

@@ -1,4 +1,4 @@
-import { useAnimate } from 'motion/react';
+import { useAnimate, type AnimationScope } from 'motion/react';
 import { useState } from 'react';
 import type { CardMeta, CardsState } from './types';
 
@@ -6,9 +6,10 @@ export function useCardsState<
   Meta extends CardMeta,
   ScopeEl extends Element = Element,
   CardEl extends Element = Element,
->(data: Meta[], selector: string): CardsState<Meta, ScopeEl> {
-  const init = useInitCards<Meta>(data);
+>(data: Meta[], selector: string = ':scope > *'): CardsState<Meta, ScopeEl> {
   const [deckRef, animate] = useAnimate<ScopeEl>();
+  const init = useInitCards<Meta>(data);
+  const getCardElements = useCardElements<ScopeEl, CardEl>(deckRef, selector);
   const [cards, setCards] = useState(init);
 
   return {
@@ -16,14 +17,11 @@ export function useCardsState<
     deckRef,
 
     animate,
+    getCardElements,
     onCardsChange: setCards,
-    onCardsReset: () => setCards(init),
-    getCardElements() {
-      if (!deckRef.current) {
-        throw new Error('Scope element is not defined');
-      }
-
-      return Array.from(deckRef.current.querySelectorAll<CardEl>(selector));
+    onCardsReset: async () => {
+      await animate(getCardElements(), { x: 0, y: 0 });
+      setCards(init);
     },
   };
 }
@@ -39,5 +37,18 @@ function useInitCards<Meta extends CardMeta>(data: Meta[]) {
     }
 
     return cards;
+  };
+}
+
+function useCardElements<ScopeEl extends Element, CardEl extends Element>(
+  deckRef: AnimationScope<ScopeEl>,
+  selector: string,
+) {
+  return () => {
+    if (!deckRef.current) {
+      throw new Error('Scope element is not defined');
+    }
+
+    return Array.from(deckRef.current.querySelectorAll<CardEl>(selector));
   };
 }

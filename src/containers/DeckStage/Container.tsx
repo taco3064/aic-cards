@@ -18,7 +18,6 @@ export default function DeckStage<Meta extends CardMeta>({
 }: DeckStageProps<Meta>) {
   const { deckRef, cards, ...methodProps } = useCardsState<Meta, HTMLDivElement>(
     defaultCards,
-    ':scope > *',
   );
 
   return (

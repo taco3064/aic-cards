@@ -15,14 +15,9 @@ const useOverhand: UseShuffleHandler = ({ cards, duration, size, animate }) => {
 
       await Promise.allSettled([
         //* 捏住的牌往下掉
-        ...pinched.elements.map((el, i) => {
-          const z = {
-            fm: total - i,
-            to: total - (i + drawed.elements.length),
-          };
-
-          return presetAnim(el, { y: 0, z: [z.fm, z.to] });
-        }),
+        ...pinched.elements.map((el, i) =>
+          presetAnim(el, { z: total - (i + drawed.elements.length) }),
+        ),
 
         //* 抽出的牌往上疊加
         ...drawed.elements.map((el, i) => {
