@@ -1,4 +1,4 @@
-import type { CardMeta, CardSize, CardsState } from '../useCardsState';
+import type { CardMeta, CardsState } from '../useCardsState';
 
 export type SpreadMode = 'ARCHED_RIBBON';
 
@@ -19,7 +19,7 @@ export type SpreadHandlers = Record<
 >;
 
 export interface SpreadCardsOptions<Meta extends CardMeta>
-  extends Pick<CardsState<Meta>, 'cards' | 'animate' | 'getCardElements'> {
+  extends Pick<CardsState<Meta>, 'animate' | 'getCardElements'> {
   size: CardSize<'component'>;
 }
 

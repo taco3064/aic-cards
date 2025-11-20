@@ -1,2 +1,2 @@
 export { useCardsState } from './hooks';
-export type { CardMeta, CardSize, CardsState } from './types';
+export type { CardMeta, CardsState } from './types';

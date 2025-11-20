@@ -29,7 +29,6 @@ export default function DeckStage<Meta extends CardMeta>({
   });
 
   const { spreaded, spreading, onSpread, onSpreadReset } = useSpreadCards({
-    cards,
     size,
     animate,
     getCardElements,

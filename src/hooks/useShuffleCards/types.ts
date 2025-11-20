@@ -1,4 +1,4 @@
-import type { CardMeta, CardSize, CardsState } from '../useCardsState';
+import type { CardMeta, CardsState } from '../useCardsState';
 
 export type ShuffleMode = 'OVERHAND' | 'RIFFLE';
 

@@ -3,16 +3,9 @@ import type { JsonObject } from 'type-fest';
 
 import type { Animate } from '../usePresetAnimate';
 
-type SizeFields = 'width' | 'height';
-
 export interface CardMeta extends JsonObject {
   id: string | number;
 }
-
-export type CardSize<Meta extends 'component' | 'styled'> = Record<
-  Meta extends 'component' ? SizeFields : `$${SizeFields}`,
-  number
->;
 
 export interface CardsState<Meta extends CardMeta, ScopeEl extends Element = Element> {
   cards: Meta[];

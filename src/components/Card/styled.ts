@@ -1,8 +1,6 @@
 import styled from 'styled-components';
 import { motion } from 'motion/react';
 
-import type { CardSize } from '~app/hooks/useCardsState';
-
 const CardBack = styled.div<{ $img?: string }>`
   position: absolute;
   width: inherit;

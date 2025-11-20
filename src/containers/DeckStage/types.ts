@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import type { CardMeta, CardSize } from '~app/hooks/useCardsState';
+import type { CardMeta } from '~app/hooks/useCardsState';
 import type { CardProps } from '~app/components/Card';
 import type { useShuffleCards } from '~app/hooks/useShuffleCards';
 import type { useSpreadCards } from '~app/hooks/useSpreadCards';

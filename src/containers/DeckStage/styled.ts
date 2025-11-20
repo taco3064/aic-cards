@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import Button from '~app/styles/Button';
-import type { CardSize } from '~app/hooks/useCardsState';
 
 export default {
   Container: styled.section`
