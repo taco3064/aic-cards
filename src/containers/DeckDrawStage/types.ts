@@ -19,7 +19,7 @@ export interface DeckToolbarProps<Meta extends CardMeta> {
   onSpread: ReturnType<typeof useSpreadCards<Meta>>['onSpread'];
 }
 
-export interface DeckStageProps<Meta extends CardMeta>
+export interface DeckDrawStageProps<Meta extends CardMeta>
   extends Pick<CardProps<Meta>, 'size'> {
   backImg?: string;
   className?: string;

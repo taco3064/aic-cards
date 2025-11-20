@@ -1,5 +1,5 @@
 import type { ComponentProps } from 'react';
-import Icon from './Styled';
+import Icon from './styleds';
 
 export default Icon;
 

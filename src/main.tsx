@@ -2,18 +2,18 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 
 import CARD_BACK_IMG from '~app/assets/imgs/poker-pattern.png';
-import DeckStage from '~app/containers/DeckStage';
+import DeckDrawStage from '~app/containers/DeckDrawStage';
 import GlobalStyle from '~app/styles/GlobalStyle';
 
-const POKER_DATA = Array.from({ length: 52 }).map((_, i) => ({ id: i }));
+const POKER = Array.from({ length: 52 }).map((_, i) => ({ id: i }));
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <GlobalStyle.App />
 
-    <DeckStage
+    <DeckDrawStage
       backImg={CARD_BACK_IMG}
-      defaultCards={POKER_DATA}
+      defaultCards={POKER}
       size={{ width: 180, height: 260 }}
       onCardClick={console.log}
     />
