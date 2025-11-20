@@ -5,40 +5,28 @@ import DrawCardIcon from '~app/components/icons/DrawCardIcon';
 import ResetIcon from '~app/components/icons/ResetIcon';
 import Styled from './styled';
 import Toolbar from '~app/styles/Toolbar/Styled';
+import Typography from '~app/styles/Typography';
 import { useShuffleCards } from '~app/hooks/useShuffleCards';
 import { useSpreadCards } from '~app/hooks/useSpreadCards';
 import type { CardMeta } from '~app/hooks/useCardsState';
 import type { DeckToolbarProps } from './types';
 
-const { ShuffleButton, ActionButton, Status } = Styled;
+const { ShuffleButton, ActionButton } = Styled;
 
 export default function DeckToolbar<Meta extends CardMeta>({
-  cards,
-  duration,
-  size,
   onCardsReset,
   ...props
 }: DeckToolbarProps<Meta>) {
   const [spreaded, setSpreaded] = useState(false);
-
-  const { shuffling, onShuffle } = useShuffleCards({
-    ...props,
-    cards,
-    duration,
-    size,
-  });
-
-  const { spreading, onSpread } = useSpreadCards({
-    ...props,
-    cards,
-    duration,
-    size,
-  });
+  const { shuffling, onShuffle } = useShuffleCards(props);
+  const { spreading, onSpread } = useSpreadCards(props);
 
   return (
     <Toolbar.Base>
       {shuffling || spreading ? (
-        <Status>{shuffling ? 'Shuffling...' : 'Spreading...'}</Status>
+        <Typography.Status>
+          {shuffling ? 'Shuffling...' : 'Spreading...'}
+        </Typography.Status>
       ) : (
         <Button.Group>
           {spreaded ? (

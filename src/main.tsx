@@ -15,6 +15,7 @@ createRoot(document.getElementById('root')!).render(
       backImg={CARD_BACK_IMG}
       defaultCards={POKER_DATA}
       size={{ width: 180, height: 260 }}
+      onCardClick={console.log}
     />
   </StrictMode>,
 );

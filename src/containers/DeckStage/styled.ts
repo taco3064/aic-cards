@@ -46,10 +46,4 @@ export default {
     margin: -10px;
     z-index: 1;
   `,
-  Status: styled.span`
-    padding: 8px 16px;
-    font-size: 18px;
-    font-weight: 600;
-    color: #b6b7b6;
-  `,
 };

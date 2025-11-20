@@ -33,7 +33,7 @@ export default function DeckStage<Meta extends CardMeta>({
           <Card
             {...{ meta, size }}
             key={meta.id}
-            animationProps={{ animate: { z: defaultCards.length - i } }}
+            animationProps={{ animate: { z: cards.length - i } }}
             className="DeckStageCard"
             imgs={{ back: backImg, front: onCardImageRender?.(meta) }}
             onClick={onCardClick}

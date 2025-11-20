@@ -2,6 +2,12 @@ import type { CardMeta, CardSize, CardsState } from '../useCardsState';
 
 type ShuffleMode = 'OVERHAND' | 'RIFFLE';
 
+export interface CuttedDeck<Meta extends CardMeta> {
+  total: number;
+  cards: Meta[];
+  elements: Element[];
+}
+
 export type ShuffleHandlers<Meta extends CardMeta> = Record<
   ShuffleMode,
   (elements: Element[], utils: Utils<Meta>) => Promise<Meta[]>
@@ -27,10 +33,5 @@ export interface Utils<Meta extends CardMeta> {
     cards: Meta[],
     elements: Element[],
     start: number,
-    deleteCount?: number,
-  ) => {
-    total: number;
-    cards: Meta[];
-    elements: Element[];
-  };
+  ) => [CuttedDeck<Meta>, CuttedDeck<Meta>];
 }

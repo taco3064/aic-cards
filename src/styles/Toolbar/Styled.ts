@@ -9,6 +9,7 @@ export default {
     padding: 8px 12px;
     margin-top: auto;
     min-height: 48px;
+    width: 100%;
   `,
   Divider: styled.hr`
     height: 100%;

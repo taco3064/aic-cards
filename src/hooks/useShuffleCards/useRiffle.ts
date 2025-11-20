@@ -7,14 +7,15 @@ const useRiffle: UseShuffleHandler = ({ cards, duration, size, animate }) => {
   const displX = size.width * 0.6;
 
   return async (elements, { release, cut }) => {
-    const left = cut(cards, elements, 0, Math.ceil(cards.length / 2));
     const result: typeof cards = [];
+    let [left, right] = cut(cards, elements, Math.ceil(cards.length / 2));
 
+    //* 把牌堆分為左右兩半並往外撥開
     await Promise.allSettled([
       ...left.elements.map((el, i) =>
         presetAnim(el, { x: [0, -displX], z: [total - i, total * 2 + i] }),
       ),
-      ...elements.map((el, i) =>
+      ...right.elements.map((el, i) =>
         presetAnim(el, {
           x: [0, displX],
           z: [total - (i + left.total), total * 2 + i],
@@ -22,18 +23,13 @@ const useRiffle: UseShuffleHandler = ({ cards, duration, size, animate }) => {
       ),
     ]);
 
-    while (left.elements.length || elements.length) {
-      const fall = {
-        left: cut(
-          left.cards,
-          left.elements,
-          Math.max(0, left.elements.length - release(cards) - 1),
-        ),
-        right: cut(cards, elements, Math.max(0, elements.length - release(cards) - 1)),
-      };
+    //* 左右兩邊的牌交錯落下
+    while (left.elements.length || right.elements.length) {
+      const [fallLeft, pinchedLeft] = cut(left.cards, left.elements, -release(cards));
+      const [fallRight, pinchedRight] = cut(right.cards, right.elements, -release(cards));
 
       await Promise.allSettled(
-        fall.left.elements.reverse().map((el, i) => {
+        fallLeft.elements.reverse().map((el, i) => {
           const z = { fm: total * 2 + i, to: result.length + i };
 
           return presetAnim(el, { x: [-displX, 0], z: [z.fm, z.to] });
@@ -41,14 +37,16 @@ const useRiffle: UseShuffleHandler = ({ cards, duration, size, animate }) => {
       );
 
       await Promise.allSettled(
-        fall.right.elements.reverse().map((el, i) => {
-          const z = { fm: total * 2 + i, to: result.length + fall.left.total + i };
+        fallRight.elements.reverse().map((el, i) => {
+          const z = { fm: total * 2 + i, to: result.length + fallLeft.total + i };
 
           return presetAnim(el, { x: [displX, 0], z: [z.fm, z.to] });
         }),
       );
 
-      result.unshift(...fall.right.cards, ...fall.left.cards);
+      left = pinchedLeft;
+      right = pinchedRight;
+      result.unshift(...fallRight.cards, ...fallLeft.cards);
     }
 
     return result;
