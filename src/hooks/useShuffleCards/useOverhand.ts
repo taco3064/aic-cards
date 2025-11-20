@@ -11,7 +11,7 @@ const useOverhand: UseShuffleHandler = ({ cards, duration, size, animate }) => {
     let deck: CuttedDeck<(typeof cards)[number]> = { cards, elements, total };
 
     do {
-      const [drawed, pinched] = cut(deck.cards, deck.elements, release(cards) + 3);
+      const [drawed, pinched] = cut(release(cards) + 3, deck);
 
       await Promise.allSettled([
         //* 捏住的牌往下掉

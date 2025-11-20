@@ -8,7 +8,7 @@ const useRiffle: UseShuffleHandler = ({ cards, duration, size, animate }) => {
 
   return async (elements, { release, cut }) => {
     const result: typeof cards = [];
-    let [left, right] = cut(cards, elements, Math.ceil(cards.length / 2));
+    let [left, right] = cut(Math.ceil(cards.length / 2), { cards, elements });
 
     //* 把牌堆分為左右兩半並往外撥開
     await Promise.allSettled([
@@ -25,8 +25,8 @@ const useRiffle: UseShuffleHandler = ({ cards, duration, size, animate }) => {
 
     //* 左右兩邊的牌交錯落下
     while (left.elements.length || right.elements.length) {
-      const [fallLeft, pinchedLeft] = cut(left.cards, left.elements, -release(cards));
-      const [fallRight, pinchedRight] = cut(right.cards, right.elements, -release(cards));
+      const [fallLeft, pinchedLeft] = cut(-release(cards), left);
+      const [fallRight, pinchedRight] = cut(-release(cards), right);
 
       await Promise.allSettled(
         fallLeft.elements.reverse().map((el, i) => {

@@ -30,8 +30,7 @@ export interface Utils<Meta extends CardMeta> {
   release: (cards: Meta[]) => number;
 
   cut: (
-    cards: Meta[],
-    elements: Element[],
     start: number,
+    deck: Pick<CuttedDeck<Meta>, 'cards' | 'elements'>,
   ) => [CuttedDeck<Meta>, CuttedDeck<Meta>];
 }

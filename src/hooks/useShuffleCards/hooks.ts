@@ -23,7 +23,7 @@ export function useShuffleCards<Meta extends CardMeta>({
 
       return Math.ceil(Math.random() * base);
     },
-    cut(cards, elements, start) {
+    cut(start, { cards, elements }) {
       if (cards.length !== elements.length) {
         throw new Error('Cards and elements length mismatch');
       } else if (!start) {

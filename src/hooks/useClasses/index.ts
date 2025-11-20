@@ -1,1 +1,0 @@
-export { useExtractClasses } from './hooks';
