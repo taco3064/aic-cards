@@ -18,20 +18,15 @@ export default {
         top: calc(50% - ${$height / 2}px);
         left: calc(50% - ${$width / 2}px);
 
-        ${
-          ($selectionClasses &&
-            `
-              &.${$selectionClasses.selectable}:hover {
-                cursor: pointer;
-                filter: brightness(1.2);
-              }
+        &.${$selectionClasses?.drawable || 'drawable'}:hover {
+          cursor: pointer;
+          border: 3px solid white;
+        }
 
-              &.${$selectionClasses.selected} {
-                cursor: pointer;
-                filter: brightness(1.5) !important;
-              }
-            `) ||
-          ''
+        &.${$selectionClasses?.drawed || 'drawed'} {
+          cursor: pointer;
+          filter: brightness(1.5);
+          border: 3px solid white;
         }
       }
     `}

@@ -1,6 +1,7 @@
 import cx from 'clsx';
 
 import Button from '~app/styles/Button';
+import CheckIcon from '~app/components/icons/CheckIcon';
 import DrawCardIcon from '~app/components/icons/DrawCardIcon';
 import ResetIcon from '~app/components/icons/ResetIcon';
 import Styled from './styleds';
@@ -13,7 +14,9 @@ const { ShuffleButton, ActionButton } = Styled;
 
 export default function DeckToolbar<Meta extends CardMeta>({
   className,
+  disableConfirm = false,
   status,
+  onConfirm,
   onReset,
   onShuffle,
   onSpread,
@@ -24,25 +27,38 @@ export default function DeckToolbar<Meta extends CardMeta>({
         <Typography.Status>
           {status.shuffling ? 'Shuffling...' : 'Spreading...'}
         </Typography.Status>
+      ) : status.spreaded ? (
+        <>
+          <ActionButton
+            $disableMargin
+            $colors={{ bg: 'transparent', border: '#609fc0', text: '#609fc0' }}
+            onClick={onReset}
+          >
+            <ResetIcon />
+          </ActionButton>
+
+          {!disableConfirm && (
+            <ActionButton
+              $disableMargin
+              $colors={{ bg: '#609fc0', text: '#fff' }}
+              onClick={onConfirm}
+            >
+              <CheckIcon />
+            </ActionButton>
+          )}
+        </>
       ) : (
         <Button.Group>
-          {status.spreaded ? (
-            <ActionButton onClick={onReset}>
-              <ResetIcon />
-            </ActionButton>
-          ) : (
-            <>
-              <ShuffleButton onClick={() => onShuffle('OVERHAND')}>
-                Overhand
-              </ShuffleButton>
+          <ShuffleButton onClick={() => onShuffle('OVERHAND')}>Overhand</ShuffleButton>
 
-              <ActionButton onClick={() => onSpread('ARCHED_RIBBON')}>
-                <DrawCardIcon />
-              </ActionButton>
+          <ActionButton
+            $colors={{ bg: '#609fc0', text: '#fff' }}
+            onClick={() => onSpread('ARCHED_RIBBON')}
+          >
+            <DrawCardIcon />
+          </ActionButton>
 
-              <ShuffleButton onClick={() => onShuffle('RIFFLE')}>Riffle</ShuffleButton>
-            </>
-          )}
+          <ShuffleButton onClick={() => onShuffle('RIFFLE')}>Riffle</ShuffleButton>
         </Button.Group>
       )}
     </Toolbar.Base>

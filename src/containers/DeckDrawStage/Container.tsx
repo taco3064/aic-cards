@@ -1,5 +1,4 @@
 import cx from 'clsx';
-import { useState } from 'react';
 
 import Card from '~app/components/Card';
 import Cards from '~app/styles/Cards';
@@ -20,8 +19,6 @@ export default function DeckDrawStage<Meta extends CardMeta>({
   onCardContentRender,
   onCardImageRender,
 }: DeckDrawStageProps<Meta>) {
-  const [draweds, setDraweds] = useState<Meta[]>([]);
-
   const { deckRef, cards, animate, getCardElements, onCardsChange, onCardsReset } =
     useCardsState<Meta, HTMLDivElement, HTMLDivElement>(defaultCards);
 
@@ -39,15 +36,11 @@ export default function DeckDrawStage<Meta extends CardMeta>({
     getCardElements,
   });
 
-  const selectable = spreaded && !spreading && draweds.length < maxDrawCount;
-
-  const { onDraw } = useDrawCards({
-    cards,
-    draweds,
-    enabled: selectable,
+  const { drawable, draweds, onDraw, onDrawReset } = useDrawCards({
+    enabled: spreaded && !spreading,
+    maxDrawCount,
     size,
     animate,
-    getCardElements,
   });
 
   return (
@@ -55,7 +48,6 @@ export default function DeckDrawStage<Meta extends CardMeta>({
       <Cards.Deck
         ref={deckRef}
         className="DeckStageDeck"
-        $selectionClasses={{ selected: 'selected', selectable: 'selectable' }}
         $width={size.width}
         $height={size.height}
         animate={{
@@ -69,18 +61,9 @@ export default function DeckDrawStage<Meta extends CardMeta>({
             {...{ meta, size }}
             key={meta.id}
             animationProps={{ animate: { z: cards.length - i } }}
+            className={cx('DeckStageCard', { drawable, drawed: draweds.includes(meta) })}
             imgs={{ back: backImg, front: onCardImageRender?.(meta) }}
-            className={cx('DeckStageCard', {
-              selectable,
-              selected: draweds.includes(meta),
-            })}
-            onClick={async (e, meta) => {
-              if (await onDraw(e.currentTarget)) {
-                setDraweds([...draweds, meta]);
-              } else {
-                setDraweds(draweds.filter((drawed) => drawed !== meta));
-              }
-            }}
+            onClick={(e, meta) => onDraw(e.currentTarget, meta)}
           >
             {onCardContentRender?.(meta)}
           </Card>
@@ -90,11 +73,13 @@ export default function DeckDrawStage<Meta extends CardMeta>({
       <DeckToolbar
         {...{ onShuffle, onSpread }}
         className="DeckStageToolbar"
+        disableConfirm={draweds.length < maxDrawCount}
         status={{ shuffling, spreading, spreaded }}
+        onConfirm={() => console.log(draweds)}
         onReset={() => {
           onCardsReset();
           onSpread();
-          setDraweds([]);
+          onDrawReset();
         }}
       />
     </Styled.Container>

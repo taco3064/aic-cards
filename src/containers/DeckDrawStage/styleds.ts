@@ -18,14 +18,12 @@ export default {
     font-size: 14px;
     width: 120px;
   `,
-  ActionButton: styled(Button.Base)`
-    background: #609fc0;
-    color: #fff;
+  ActionButton: styled(Button.Base)<{ $disableMargin?: boolean }>`
     width: 60px;
     height: 60px;
     font-size: 36px;
     border-radius: 50% !important;
-    margin: -10px;
+    margin: ${({ $disableMargin }) => ($disableMargin ? '0' : '-10px')};
     z-index: 1;
   `,
 };

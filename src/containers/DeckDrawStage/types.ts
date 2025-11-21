@@ -11,7 +11,9 @@ export interface CardDeckProps extends CardSize<'styled'> {
 
 export interface DeckToolbarProps<Meta extends CardMeta> {
   className?: string;
+  disableConfirm?: boolean;
   status: Record<'shuffling' | 'spreading' | 'spreaded', boolean>;
+  onConfirm: () => void;
   onReset: () => void;
   onShuffle: ReturnType<typeof useShuffleCards<Meta>>['onShuffle'];
   onSpread: ReturnType<typeof useSpreadCards<Meta>>['onSpread'];
