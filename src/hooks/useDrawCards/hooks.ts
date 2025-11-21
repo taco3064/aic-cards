@@ -34,6 +34,18 @@ export function useDrawCards<Meta extends CardMeta>({
         await $animate(element, drawn.position);
       }
     },
+    onRedraw: async () => {
+      const result: DrawnCard<Meta>[] = [];
+
+      for (const { element, card } of drawns) {
+        const position = getPosition(element);
+
+        result.push({ card, element, position });
+        await $animate(element, getSlideOutPosition(element, position));
+      }
+
+      setDrawns(result);
+    },
   };
 }
 

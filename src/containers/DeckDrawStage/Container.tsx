@@ -6,6 +6,7 @@ import DeckToolbar from './DeckToolbar';
 import Styled from './styleds';
 import { useCardsState, type CardMeta } from '~app/hooks/useCardsState';
 import { useDrawCards } from '~app/hooks/useDrawCards';
+import { useResponsiveCallbacks } from '~app/hooks/useResponsiveCallbacks';
 import { useShuffleCards } from '~app/hooks/useShuffleCards';
 import { useSpreadCards } from '~app/hooks/useSpreadCards';
 import type { DeckDrawStageProps } from './types';
@@ -30,18 +31,20 @@ export default function DeckDrawStage<Meta extends CardMeta>({
     onCardsChange,
   });
 
-  const { spreaded, spreading, onSpread } = useSpreadCards({
+  const { spreaded, spreading, onRespread, onSpread, onSpreadReset } = useSpreadCards({
     size,
     animate,
     getCardElements,
   });
 
-  const { drawable, drawns, isDrawn, onDraw, onDrawReset } = useDrawCards({
+  const { drawable, drawns, isDrawn, onDraw, onDrawReset, onRedraw } = useDrawCards({
     enabled: spreaded && !spreading,
     maxDrawnCount,
     size,
     animate,
   });
+
+  useResponsiveCallbacks('sequential', [onRespread, onRedraw], spreaded);
 
   return (
     <Styled.Container className={cx('DeckStageContainer', className)}>
@@ -78,7 +81,7 @@ export default function DeckDrawStage<Meta extends CardMeta>({
         onConfirm={() => console.log(drawns)}
         onReset={() => {
           onCardsReset();
-          onSpread();
+          onSpreadReset();
           onDrawReset();
         }}
       />

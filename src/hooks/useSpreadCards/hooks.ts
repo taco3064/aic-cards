@@ -1,21 +1,14 @@
-import { useEffect, useRef, useImperativeHandle, useState } from 'react';
+import { useState } from 'react';
 
 import useArchedRibbon from './useArchedRibbon';
-import { useBreakpoint } from '../useBreakpoint';
+import type { AnimationMode, SpreadAnimations, SpreadCardsOptions, Utils } from './types';
 import type { CardMeta } from '../useCardsState';
-
-import type {
-  AnimationMode,
-  SpreadAnimations,
-  SpreadCardsOptions,
-  SpreadHandler,
-  Utils,
-} from './types';
 
 export function useSpreadCards<Meta extends CardMeta>({
   getCardElements,
   ...options
 }: SpreadCardsOptions<Meta>) {
+  const [spreadMode, setSpreadMode] = useState<AnimationMode>();
   const [spreading, setSpreading] = useState(false);
 
   const animations: SpreadAnimations = {
@@ -41,34 +34,27 @@ export function useSpreadCards<Meta extends CardMeta>({
   };
 
   return {
+    spreaded: Boolean(spreadMode),
     spreading,
 
-    ...useResponsiveSpread(async (mode: AnimationMode) => {
+    onSpreadReset: () => setSpreadMode(undefined),
+    onSpread: async (mode: AnimationMode) => {
       const elements = getCardElements();
       const animation = animations[mode];
+
+      setSpreadMode(mode);
+      setSpreading(true);
+      await animation(elements, utils);
+      setSpreading(false);
+    },
+    onRespread: async () => {
+      if (!spreadMode) return;
+      const elements = getCardElements();
+      const animation = animations[spreadMode];
 
       setSpreading(true);
       await animation(elements, utils);
       setSpreading(false);
-    }),
-  };
-}
-
-function useResponsiveSpread(onSpread: SpreadHandler) {
-  const breakpoint = useBreakpoint();
-  const handlerRef = useRef<SpreadHandler>(null);
-  const [spreadMode, setSpreadMode] = useState<AnimationMode>();
-
-  useImperativeHandle(handlerRef, () => onSpread, [onSpread]);
-
-  useEffect(() => {
-    if (spreadMode) {
-      handlerRef.current?.(spreadMode);
-    }
-  }, [breakpoint, spreadMode]);
-
-  return {
-    spreaded: Boolean(spreadMode),
-    onSpread: (mode?: AnimationMode) => setSpreadMode(mode),
+    },
   };
 }
