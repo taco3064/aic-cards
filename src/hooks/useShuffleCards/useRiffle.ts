@@ -1,3 +1,4 @@
+import { cut, release } from './utils';
 import { usePresetAnimate } from '../usePresetAnimate';
 import type { UseShuffleAnimate } from './types';
 
@@ -6,7 +7,7 @@ const useRiffle: UseShuffleAnimate = ({ cards, size, animate }) => {
   const total = cards.length;
   const displX = size.width * 0.6;
 
-  return async (elements, { release, cut }) => {
+  return async (elements) => {
     const result: typeof cards = [];
     let [left, right] = cut(Math.ceil(cards.length / 2), { cards, elements });
 

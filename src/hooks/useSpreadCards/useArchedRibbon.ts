@@ -1,3 +1,4 @@
+import { split } from './utils';
 import { useBreakpointMatches } from '../useBreakpoint';
 import { usePresetAnimate } from '../usePresetAnimate';
 import type { CardPose, UseSpreadAnimate } from './types';
@@ -9,7 +10,7 @@ const useArchedRibbon: UseSpreadAnimate = ({ size, animate }) => {
   const { matched: radiusMultiplier } = useBreakpointMatches({ xs: 4, sm: 5, md: 6 });
   const displY = size.height * 0.3;
 
-  return async (elements, { split }) => {
+  return async (elements) => {
     // 先算出所有「目標攤開位置」，之後再一張一張把牌移過去
     const poses: CardPose[] = [];
 

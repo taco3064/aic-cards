@@ -1,3 +1,4 @@
+import { cut, release } from './utils';
 import { usePresetAnimate } from '../usePresetAnimate';
 import type { CuttedDeck, UseShuffleAnimate } from './types';
 
@@ -6,7 +7,7 @@ const useOverhand: UseShuffleAnimate = ({ cards, size, animate }) => {
   const total = cards.length;
   const displY = size.height * 1.2;
 
-  return async (elements, { release, cut }) => {
+  return async (elements) => {
     const result: typeof cards = [];
     let deck: CuttedDeck<(typeof cards)[number]> = { cards, elements, total };
 

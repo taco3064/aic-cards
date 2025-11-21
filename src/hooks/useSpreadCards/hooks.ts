@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import useArchedRibbon from './useArchedRibbon';
-import type { AnimationMode, SpreadAnimations, SpreadCardsOptions, Utils } from './types';
+import type { AnimationMode, SpreadAnimations, SpreadCardsOptions } from './types';
 import type { CardMeta } from '../useCardsState';
 
 export function useSpreadCards<Meta extends CardMeta>({
@@ -13,24 +13,6 @@ export function useSpreadCards<Meta extends CardMeta>({
 
   const animations: SpreadAnimations = {
     ARCHED_RIBBON: useArchedRibbon(options),
-  };
-
-  const utils: Utils = {
-    split(elements, rows) {
-      const total = elements.length;
-      const base = Math.floor(total / rows);
-      const extra = total % rows; // 前 extra 份多分 1 個
-      const result: HTMLElement[][] = [];
-
-      for (let i = 0, start = 0; i < rows; i++) {
-        const count = base + (rows - i <= extra ? 1 : 0);
-
-        result.push(elements.slice(start, start + count));
-        start += count;
-      }
-
-      return result;
-    },
   };
 
   return {
@@ -45,7 +27,7 @@ export function useSpreadCards<Meta extends CardMeta>({
 
       setSpreadMode(mode);
       setSpreading(true);
-      await animation(elements, utils);
+      await animation(elements);
       setSpreading(false);
     },
   };

@@ -10,7 +10,7 @@ export interface CuttedDeck<Meta extends CardMeta> {
 
 export type ShuffleAnimations<Meta extends CardMeta> = Record<
   AnimationMode,
-  (elements: HTMLElement[], utils: Utils<Meta>) => Promise<Meta[]>
+  (elements: HTMLElement[]) => Promise<Meta[]>
 >;
 
 export interface ShuffleCardsOptions<Meta extends CardMeta>
@@ -24,12 +24,3 @@ export interface ShuffleCardsOptions<Meta extends CardMeta>
 export type UseShuffleAnimate = <Meta extends CardMeta>(
   options: Omit<ShuffleCardsOptions<Meta>, 'getCardElements' | 'onCardsChange'>,
 ) => ShuffleAnimations<Meta>[AnimationMode];
-
-export interface Utils<Meta extends CardMeta> {
-  release: (cards: Meta[]) => number;
-
-  cut: (
-    start: number,
-    deck: Pick<CuttedDeck<Meta>, 'cards' | 'elements'>,
-  ) => [CuttedDeck<Meta>, CuttedDeck<Meta>];
-}

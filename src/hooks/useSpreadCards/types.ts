@@ -12,7 +12,7 @@ export type SpreadHandler = (mode: AnimationMode) => Promise<void>;
 
 export type SpreadAnimations = Record<
   AnimationMode,
-  (elements: HTMLElement[], utils: Utils) => Promise<void>
+  (elements: HTMLElement[]) => Promise<void>
 >;
 
 export interface SpreadCardsOptions<Meta extends CardMeta>
@@ -23,7 +23,3 @@ export interface SpreadCardsOptions<Meta extends CardMeta>
 export type UseSpreadAnimate = <Meta extends CardMeta>(
   options: Omit<SpreadCardsOptions<Meta>, 'getCardElements'>,
 ) => SpreadAnimations[AnimationMode];
-
-export type Utils = {
-  split: <Rows extends number>(elements: HTMLElement[], rows: Rows) => HTMLElement[][];
-};
