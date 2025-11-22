@@ -1,11 +1,10 @@
 import cx from 'clsx';
-import { useEffect } from 'react';
 
 import Card from '~app/components/Card';
 import Cards from '~app/styles/Cards';
+import { useAutoSpread, useSpreadCards } from '~app/hooks/useSpreadCards';
 import { useCardsAnimate } from '~app/hooks/useCardsAnimate';
 import { useResponsiveCallbacks } from '~app/hooks/useResponsiveCallbacks';
-import { useSpreadCards } from '~app/hooks/useSpreadCards';
 import type { CardsFanStageProps } from './types';
 
 export default function CardsFanStage<Meta extends CardMeta>({
@@ -14,6 +13,7 @@ export default function CardsFanStage<Meta extends CardMeta>({
   className,
   position,
   size,
+  spreadMode = 'HAND_FAN',
   onCardContentRender,
   onCardImageRender,
 }: CardsFanStageProps<Meta>) {
@@ -21,10 +21,7 @@ export default function CardsFanStage<Meta extends CardMeta>({
   const { onSpread } = useSpreadCards({ cardsRef, size, animate });
 
   useResponsiveCallbacks('sequential', [onSpread]);
-
-  useEffect(() => {
-    onSpread('ARCHED_RIBBON');
-  }, []);
+  useAutoSpread(spreadMode, onSpread);
 
   return (
     <>

@@ -48,7 +48,7 @@ export default function DeckToolbar<Meta extends CardMeta>({
 
           <ActionButton
             $colors={{ bg: '#609fc0', text: '#fff' }}
-            onClick={() => onSpread('ARCHED_RIBBONS')}
+            onClick={() => onSpread('ARCHED_RIBBON')}
           >
             <DrawCardIcon />
           </ActionButton>

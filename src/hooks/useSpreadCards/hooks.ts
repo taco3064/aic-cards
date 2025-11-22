@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useImperativeHandle, useRef, useState } from 'react';
 
 import useArchedRibbon from './useArchedRibbon';
-import useArchedRibbons from './useArchedRibbons';
+import useHandFan from './useHandFan';
+import useStraight from './useStraight';
 import type { SpreadMode, SpreadOptions } from './types';
 
 export function useSpreadCards({ cardsRef, ...options }: SpreadOptions) {
@@ -9,8 +10,9 @@ export function useSpreadCards({ cardsRef, ...options }: SpreadOptions) {
   const [spreading, setSpreading] = useState(false);
 
   const animations = {
+    HAND_FAN: useHandFan(options),
     ARCHED_RIBBON: useArchedRibbon(options),
-    ARCHED_RIBBONS: useArchedRibbons(options),
+    STRAIGHT: useStraight(options),
   };
 
   return {
@@ -28,4 +30,19 @@ export function useSpreadCards({ cardsRef, ...options }: SpreadOptions) {
       setSpreading(false);
     },
   };
+}
+
+export function useAutoSpread(
+  spreadMode: SpreadMode,
+  onSpread: ReturnType<typeof useSpreadCards>['onSpread'],
+) {
+  const spreadRef = useRef<typeof onSpread>(null);
+
+  useImperativeHandle(spreadRef, () => onSpread, [onSpread]);
+
+  useEffect(() => {
+    if (spreadMode) {
+      spreadRef.current?.(spreadMode);
+    }
+  }, [spreadMode]);
 }

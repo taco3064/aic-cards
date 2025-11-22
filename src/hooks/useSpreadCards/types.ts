@@ -2,13 +2,7 @@ import type { Animate, CardsRef } from '../useCardsAnimate';
 
 type SpreadAnimate = (elements: Readonly<HTMLElement[]>) => Promise<void>;
 
-export type SpreadMode = 'ARCHED_RIBBON' | 'ARCHED_RIBBONS';
-
-export interface CardMatrix {
-  x: number;
-  y: number;
-  rotate: number;
-}
+export type SpreadMode = 'HAND_FAN' | 'ARCHED_RIBBON' | 'STRAIGHT';
 
 export interface SpreadOptions {
   cardsRef: CardsRef;
