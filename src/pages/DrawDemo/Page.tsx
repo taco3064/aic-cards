@@ -9,7 +9,7 @@ import Styled from './styled';
 import { useCardsState } from '~app/hooks/useCardsState';
 import type { SpreadMode } from '~app/hooks/useSpreadCards';
 
-const BASE_CARD_URL = '/imgs/poker';
+const BASE_CARD_URL = `${import.meta.env.BASE_URL}imgs/poker`;
 const CARDS = Array.from({ length: 52 }).map((_, i) => ({ id: i }));
 const MAX_DRAWN_COUNT = 3;
 const SUITS = ['spade', 'heart', 'club', 'diamond', 'joker'];
