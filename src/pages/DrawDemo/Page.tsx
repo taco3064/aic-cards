@@ -14,6 +14,8 @@ const CARDS = Array.from({ length: 52 }).map((_, i) => ({ id: i }));
 const MAX_DRAWN_COUNT = 3;
 const SUITS = ['spade', 'heart', 'club', 'diamond', 'joker'];
 
+console.log(BASE_CARD_URL);
+
 const DECK_PROPS = {
   backImg: `${BASE_CARD_URL}/cover.png`,
   size: { width: 180, height: 260 },

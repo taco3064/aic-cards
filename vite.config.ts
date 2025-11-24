@@ -6,7 +6,7 @@ import { name } from './package.json';
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: process.env.NODE_ENV !== 'production' ? '/' : `/${name}`,
+  base: process.env.NODE_ENV !== 'production' ? '/' : `/${name}/`,
   server: {
     open: true,
   },
