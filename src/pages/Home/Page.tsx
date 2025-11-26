@@ -5,7 +5,12 @@ import Container from '~app/styles/Container';
 
 export default function HomePage() {
   return (
-    <Container.Base $direction="column" $alignItems="flex-start" $width="sm">
+    <Container.Base
+      $direction="column"
+      $alignItems="flex-start"
+      $lineHeight={2}
+      $width="sm"
+    >
       <Markdown>
         {README.substring(README.indexOf('# Cards'), README.indexOf('---'))}
       </Markdown>

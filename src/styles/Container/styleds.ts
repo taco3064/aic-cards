@@ -12,9 +12,10 @@ const Flex = styled.div<FlexProps>`
 `;
 
 export default {
-  Base: styled(Flex)<{ $width?: Breakpoint }>`
+  Base: styled(Flex)<{ $width?: Breakpoint; $lineHeight?: number }>`
     max-width: ${({ $width }) => ($width ? `${BREAKPOINTS[$width]}px` : '100%')};
     padding: 12px 24px;
+    line-height: ${({ $lineHeight = 1.5 }) => $lineHeight};
   `,
   Flex,
 };
