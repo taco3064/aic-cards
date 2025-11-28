@@ -4,7 +4,7 @@ import type { RouteObject } from 'react-router-dom';
 export default [
   {
     path: '/',
-    Component: lazy(() => import('./App')),
+    Component: lazy(() => import('~app/layouts/CardsLayout')),
     children: [
       {
         path: '/',

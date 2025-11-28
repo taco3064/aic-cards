@@ -11,6 +11,8 @@ export default function HomePage() {
       $lineHeight={2}
       $width="sm"
     >
+      <title>Cards | Welcome</title>
+
       <Markdown>
         {README.substring(README.indexOf('# Cards'), README.indexOf('---'))}
       </Markdown>

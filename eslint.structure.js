@@ -1,32 +1,86 @@
 const ALIAS = '~app';
 
-/** @type {Record<string, { disableFolderImports: string[], disableReactImports: string[] }>} */
+/**
+ * @template T
+ * @typedef {Object} FolderStructure
+ * @property {T} components
+ * @property {T} containers
+ * @property {T} contexts
+ * @property {T} hooks
+ * @property {T} layouts
+ * @property {T} pages
+ * @property {T} styles
+ */
+
+/**
+ * @typedef {Object} StructureLint
+ * @property {string[]} [disableReactImports]
+ * @property {Partial<FolderStructure<boolean>>} [disableFolderImports]
+ * @property {Object<string, any>} [overrideRules]
+ */
+
+/** @type {FolderStructure<StructureLint>} */
 const FOLDER = {
   components: {
-    disableFolderImports: ['containers', 'contexts'],
     disableReactImports: ['createContext', 'useContext'],
+    disableFolderImports: {
+      containers: true,
+      contexts: true,
+      layouts: true,
+      pages: true,
+    },
   },
   containers: {
-    disableFolderImports: [],
     disableReactImports: ['createContext', 'useContext'],
+    disableFolderImports: {
+      layouts: true,
+      pages: true,
+    },
   },
   contexts: {
-    disableFolderImports: ['components', 'containers', 'hooks'],
     overrideRules: {
       'react-refresh/only-export-components': 'off',
     },
+    disableFolderImports: {
+      components: true,
+      containers: true,
+      hooks: true,
+      layouts: true,
+      pages: true,
+    },
   },
   hooks: {
-    disableFolderImports: ['components', 'containers'],
     disableReactImports: ['createContext'],
+    disableFolderImports: {
+      components: true,
+      containers: true,
+      layouts: true,
+      pages: true,
+    },
+  },
+  layouts: {
+    disableReactImports: ['createContext', 'useContext'],
+    disableFolderImports: {
+      components: true,
+      containers: true,
+      contexts: true,
+      hooks: true,
+      pages: true,
+    },
   },
   pages: {
-    disableFolderImports: [],
     disableReactImports: ['createContext', 'useContext'],
   },
   styles: {
-    disableFolderImports: ['components', 'containers', 'contexts', 'hooks'],
     disableReactImports: ['createContext', 'useContext'],
+    disableFolderImports: {
+      components: true,
+      containers: true,
+      contexts: true,
+      hooks: true,
+      layouts: true,
+      pages: true,
+    },
   },
 };
 
@@ -44,7 +98,15 @@ export default function getStructureLint() {
                 group: [
                   '../../*',
                   `${ALIAS}/${folder}*`,
-                  ...disableFolderImports.map((banFolder) => `${ALIAS}/${banFolder}*`),
+                  ...Object.entries(disableFolderImports || {}).reduce(
+                    (acc, [banFolder, disabled]) => {
+                      if (!disabled) {
+                        acc.push(`${ALIAS}/${banFolder}*`);
+                      }
+                      return acc;
+                    },
+                    [],
+                  ),
                 ],
               },
             ],

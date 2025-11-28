@@ -1,14 +1,14 @@
 import { Outlet } from 'react-router-dom';
+import { Suspense } from 'react';
 
 import Button from '~app/styles/Button';
+import LinearProgress from '~app/components/LinearProgress';
 import LogoIcon from '~app/components/icons/LogoIcon';
 import Toolbar from '~app/styles/Toolbar';
 
-export default function AppPage() {
+export default function CardsLayout() {
   return (
     <>
-      <title>Cards</title>
-
       <Toolbar.Navbar
         style={{ position: 'sticky', top: 0, zIndex: 10, background: 'inherit' }}
       >
@@ -26,7 +26,9 @@ export default function AppPage() {
         </Button.NavLink>
       </Toolbar.Navbar>
 
-      <Outlet />
+      <Suspense fallback={<LinearProgress color="#609fc0" />}>
+        <Outlet />
+      </Suspense>
     </>
   );
 }
